@@ -7,7 +7,6 @@ class FutureProviderScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-
     final pokemonName = ref.watch(pokemonNameProvider);
 
     return Scaffold(
@@ -15,15 +14,34 @@ class FutureProviderScreen extends ConsumerWidget {
         title: const Text('Future Provider'),
       ),
       body: Center(
-        child: pokemonName.when(
-          data:(data) => Text(data),
-          error: (error, stackTrace) => Text(error.toString()),
-          loading: () => CircularProgressIndicator())
-      ),
-      floatingActionButton: FloatingActionButton(
-        child: const Icon(Icons.refresh),
-        onPressed: () {},
-      ),
+          child: pokemonName.when(
+              data: (data) => Text(data),
+              error: (error, stackTrace) => Text(error.toString()),
+              loading: () => CircularProgressIndicator())),
+      floatingActionButton: 
+        Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+              FloatingActionButton(
+                heroTag: "next",
+                key: const Key("next"),
+                child: const Icon(Icons.refresh),
+                onPressed: () {
+                  ref.read(pokemonIdProvider.notifier).nextPokemon();
+                },
+              ),
+              const SizedBox(height: 20),
+              FloatingActionButton(
+                heroTag: "previous",
+                key: const Key("previous"),
+                child: const Icon(Icons.back_hand_sharp),
+                onPressed: () {
+                  ref.read(pokemonIdProvider.notifier).previusPokemon();
+                },
+              ),
+              const SizedBox(height: 40),
+          ],
+      )
     );
   }
 }
